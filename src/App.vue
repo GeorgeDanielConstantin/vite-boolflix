@@ -1,30 +1,53 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
+<script>
+import SearchBar from "./components/SearchBar.vue";
+
+import axios from "axios";
+import { store } from "./store.js";
+import AppMain from "./components/AppMain.vue";
+
+export default {
+  components: {
+    SearchBar,
+    AppMain,
+  },
+  data() {
+    return {
+      store,
+    };
+  },
+
+  methods: {
+    fetchResults(term) {
+      this.fetchMovies(term);
+      this.fetchTVSeries(term);
+    },
+    fetchMovies(query) {
+      axios
+        .get(
+          `${store.url}/search/movie?api_key=${store.api_key}&query=${query}`
+        )
+        .then((response) => {
+          store.filmList = response.data.results;
+        });
+    },
+    fetchTVSeries(query) {
+      axios
+        .get(`${store.url}/search/tv?api_key=${store.api_key}&query=${query}`)
+        .then((response) => {
+          store.TVSeriesList = response.data.results;
+        });
+    },
+  },
+};
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <SearchBar @search="fetchResults"></SearchBar>
+  <div class="container">
+    <AppMain :filmList="filmList"></AppMain>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+<style lang="scss">
+@use "./assets/scss/style.scss";
 </style>
