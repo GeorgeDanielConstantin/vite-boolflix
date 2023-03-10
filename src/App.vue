@@ -27,14 +27,32 @@ export default {
           `${store.url}/search/movie?api_key=${store.api_key}&query=${query}`
         )
         .then((response) => {
-          store.filmList = response.data.results;
+          const films = response.data.results.map((film) => {
+            return {
+              title: film.title,
+              original_title: film.original_title,
+              original_language: film.original_language,
+              vote_average: Math.ceil(film.vote_average / 2),
+              poster_path: film.poster_path,
+            };
+          });
+          store.filmList = films;
         });
     },
     fetchTVSeries(query) {
       axios
         .get(`${store.url}/search/tv?api_key=${store.api_key}&query=${query}`)
         .then((response) => {
-          store.TVSeriesList = response.data.results;
+          const tvSeries = response.data.results.map((tvSerie) => {
+            return {
+              title: tvSerie.name,
+              original_title: tvSerie.original_name,
+              original_language: tvSerie.original_language,
+              vote_average: Math.ceil(tvSerie.vote_average / 2),
+              poster_path: tvSerie.poster_path,
+            };
+          });
+          store.TVSeriesList = tvSeries;
         });
     },
   },
@@ -44,7 +62,7 @@ export default {
 <template>
   <SearchBar @search="fetchResults"></SearchBar>
   <div class="container">
-    <AppMain :filmList="filmList"></AppMain>
+    <AppMain></AppMain>
   </div>
 </template>
 

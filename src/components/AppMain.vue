@@ -23,16 +23,18 @@ export default {
       :original_title="film.original_title"
       :original_language="film.original_language"
       :vote_average="film.vote_average"
+      :poster_path="film.poster_path"
     ></Card>
   </div>
 
   <div class="row row-cols-3">
     <Card
       v-for="serie in store.TVSeriesList"
-      :title="serie.name"
-      :original_title="serie.original_name"
+      :title="serie.title"
+      :original_title="serie.original_title"
       :original_language="serie.original_language"
       :vote_average="serie.vote_average"
+      :poster_path="serie.poster_path"
     ></Card>
   </div>
 </template>
